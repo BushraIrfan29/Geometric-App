@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometizer App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+        }
+
+        .shape {
+            margin: 0 auto;
+            transition: all 0.3s ease;
+        }
+
+        .circle {
+            border-radius: 50%;
+        }
+
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: var(--triangle-half-width) solid transparent;
+            border-right: var(--triangle-half-width) solid transparent;
+            border-bottom: var(--size) solid var(--color);
+        }
+
+        .square, .circle {
+            width: var(--size);
+            height: var(--size);
+            background-color: var(--color);
+        }
+
+        #shape-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Geometizer App</h1>
+
+    <div class="controls">
+        <label for="shape-select">Choose a shape:</label>
+        <select id="shape-select">
+            <option value="square">Square</option>
+            <option value="circle">Circle</option>
+            <option value="triangle">Triangle</option>
+        </select>
+
+        <br><br>
+
+        <label for="size-slider">Size:</label>
+        <input type="range" id="size-slider" min="50" max="200" value="100">
+
+        <br><br>
+
+        <label for="color-picker">Color:</label>
+        <input type="color" id="color-picker" value="#ff0000">
+    </div>
+
+    <div id="shape-container">
+        <div id="shape" class="square shape"></div>
+    </div>
+
+    <script>
+        // Cache DOM elements for better performance
+        const shapeSelect = document.getElementById('shape-select');
+        const sizeSlider = document.getElementById('size-slider');
+        const colorPicker = document.getElementById('color-picker');
+        const shape = document.getElementById('shape');
+        const root = document.documentElement; // Access to CSS variables
+
+        // Function to update the CSS variables for size and color
+        function updateCSSVars() {
+            const size = sizeSlider.value + 'px';
+            const color = colorPicker.value;
+            
+            root.style.setProperty('--size', size);
+            root.style.setProperty('--color', color);
+            root.style.setProperty('--triangle-half-width', sizeSlider.value / 2 + 'px');
+        }
+
+        // Function to update the selected shape's class
+        function updateShape() {
+            const selectedShape = shapeSelect.value;
+            shape.className = `${selectedShape} shape`;
+        }
+
+        // Event listeners for interactivity
+        shapeSelect.addEventListener('change', () => {
+            updateShape();
+            updateCSSVars();  // Ensure styles are refreshed
+        });
+        sizeSlider.addEventListener('input', updateCSSVars);
+        colorPicker.addEventListener('input', updateCSSVars);
+
+        // Initialize the app with default values
+        updateShape();
+        updateCSSVars();
+    </script>
+
+</body>
+</html>
